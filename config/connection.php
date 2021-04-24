@@ -9,14 +9,14 @@ public function Connection(){
 
     try {
 
-        $connect = $this -> db = new PDO("mysql:localhost=localhost;dbname=proyecto-uno","root","");
+        $connect = $this -> db = new PDO("mysql:localhost=localhost;dbname=trade","root","");
 
         return $connect;
 
         
     } catch(Exception $e){
 
-        print("Error " . $e->getMessage());
+        return ("Error " . $e->getMessage());
     }
 
 }

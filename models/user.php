@@ -1,7 +1,7 @@
 
 <?php
 
-require '../config/conexion.php';
+require_once '../config/conexion.php';
 
 
 class User extends Connect {
@@ -20,7 +20,39 @@ class User extends Connect {
     }
 
 
+    public function get_points($idUser){
+
+
+          $connect = parent::Connection();
+          parent::set_names();
+
+        $sql = "SELECT puntos FROM usuario WHERE id_usuario=".$idUser;
+        
+        $sql = $connect->prepare($sql);
+        $sql-> execute();
+        return $sql ->fetchAll(PDO::FETCH_ASSOC);
+
+    }
     
+
+       public function update_points($idUser,$points,$addPoints){
+
+
+          $connect = parent::Connection();
+          parent::set_names();
+
+       $newPoints = (int)  $addPoints + (int)$points;
+ $sql = "UPDATE usuario SET  
+        puntos = ?
+        WHERE id_usuario=?;";
+        $sql = $connect->prepare($sql);
+        $sql -> bindValue(1, $newPoints);
+        $sql -> bindValue(2,$idUser);
+        $sql-> execute();
+      
+        return $sql ->fetchAll(PDO::FETCH_ASSOC);
+
+    }
     public function get_user_by_customer($idCustomer){
 
 
