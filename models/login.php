@@ -15,7 +15,7 @@ class Login extends Connect {
         $sql = "SELECT * FROM usuario where alias=? and pass_word=?";
         $sql = $connect->prepare($sql);
         $sql -> bindValue(1,$alias);
-        $sql -> bindValue(2,$password);
+        $sql -> bindValue(2,sha1($password));
 
         if ($sql->execute())
             {

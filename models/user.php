@@ -20,6 +20,21 @@ class User extends Connect {
     }
 
 
+    
+    public function get_user_by_alias($email){
+
+
+        $connect = parent::Connection();
+        parent::set_names();
+        $sql = "SELECT * FROM usuario where alias=?";
+        $sql = $connect->prepare($sql);
+        $sql -> bindValue(1, $email);
+        $sql-> execute();
+
+        return $sql ->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
     public function get_points($idUser){
 
 
@@ -42,7 +57,7 @@ class User extends Connect {
           parent::set_names();
 
        $newPoints = (int)  $addPoints + (int)$points;
- $sql = "UPDATE usuario SET  
+        $sql = "UPDATE usuario SET  
         puntos = ?
         WHERE id_usuario=?;";
         $sql = $connect->prepare($sql);
@@ -66,20 +81,30 @@ class User extends Connect {
         return $sql ->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function create_user($email,$password,$state,$rol,$idCustomer){
+    public function create_user($email,$password,$name,$surname,$tel,$address){
 
 
         $connect = parent::Connection();
         parent::set_names();
-        $sql = "INSERT INTO usuarios VALUES (NULL,?,?,?,?,?);";
+        $sql = "INSERT INTO usuario VALUES (NULL,?,?,?,?,?,?,1,0);";
         $sql = $connect->prepare($sql);
         $sql -> bindValue(1,$email);
-        $sql -> bindValue(2,$password);
-        $sql -> bindValue(3,$state);
-        $sql -> bindValue(4,$rol);
-        $sql -> bindValue(5,$idCustomer);
-        $sql-> execute();
-        return $sql ->fetchAll(PDO::FETCH_ASSOC);
+        $sql -> bindValue(2,sha1($password));
+        $sql -> bindValue(3,$name);
+        $sql -> bindValue(4,$surname);
+        $sql -> bindValue(5,$tel);     
+        $sql -> bindValue(6,$address);
+
+        if ($sql->execute())
+        {
+            return true;
+
+        }
+        else
+        {
+            return false;
+        }
+
     }
 
 
@@ -102,6 +127,8 @@ class User extends Connect {
         $sql -> bindValue(3,$state);
         $sql -> bindValue(4,$rol);
         $sql -> bindValue(5,$id);
+
+        
         $sql-> execute();
         return $sql ->fetchAll(PDO::FETCH_ASSOC);
     }
